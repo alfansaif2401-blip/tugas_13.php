@@ -1,0 +1,115 @@
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">Dashboard Akademik</h1>
+        <p class="page-subtitle">Selamat datang kembali, Admin PeTIK!</p>
+    </div>
+
+    <!-- Statistics Cards (Disuaikan dengan Data Akademik) -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Total Mahasiswa</div>
+                <div class="stat-icon" style="background-color: rgba(52, 152, 219, 0.2); color: #3498db;">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+            <div class="stat-value"><?php echo isset($stats['total_mahasiswa']) ? $stats['total_mahasiswa'] : 0; ?></div>
+            <div class="stat-change"><i class="fas fa-arrow-up"></i> 5% dari semester lalu</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Total Dosen</div>
+                <div class="stat-icon" style="background-color: rgba(46, 204, 113, 0.2); color: #2ecc71;">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+            </div>
+            <div class="stat-value"><?php echo isset($stats['total_dosen']) ? $stats['total_dosen'] : 0; ?></div>
+            <div class="stat-change"><i class="fas fa-arrow-up"></i> 2% dari semester lalu</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Total Jurusan</div>
+                <div class="stat-icon" style="background-color: rgba(155, 89, 182, 0.2); color: #9b59b6;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+            </div>
+            <div class="stat-value"><?php echo isset($stats['total_jurusan']) ? $stats['total_jurusan'] : 0; ?></div>
+            <div class="stat-change negative"><i class="fas fa-minus"></i> Stabil</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Total Mata Kuliah</div>
+                <div class="stat-icon" style="background-color: rgba(241, 196, 15, 0.2); color: #f1c40f;">
+                    <i class="fas fa-book"></i>
+                </div>
+            </div>
+            <div class="stat-value"><?php echo isset($stats['total_matkul']) ? $stats['total_matkul'] : 0; ?></div>
+            <div class="stat-change"><i class="fas fa-arrow-up"></i> 10% dari semester lalu</div>
+        </div>
+    </div>
+
+    <!-- Content Cards (Disuaikan dengan Data Akademik) -->
+    <div class="content-grid">
+        <div class="content-card">
+            <div class="card-header">Mahasiswa Terbaru</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>NIM</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jurusan</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    if (isset($recentMahasiswa) && is_array($recentMahasiswa)) {
+                        foreach (array_slice($recentMahasiswa, 0, 4) as $mhs): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($mhs['nim']); ?></td>
+                                <td><?php echo htmlspecialchars($mhs['nama_lengkap']); ?></td>
+                                <td><?php echo htmlspecialchars($mhs['nama_jurusan']); ?></td>
+                                <td><span class="status-badge <?php echo $mhs['status'] === 'Aktif' ? 'status-success' : 'status-warning'; ?>"><?php echo htmlspecialchars($mhs['status']); ?></span></td>
+                            </tr>
+                        <?php endforeach; 
+                    } else { ?>
+                        <tr><td colspan="4">Tidak ada data mahasiswa terbaru.</td></tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-card">
+            <div class="card-header">Distribusi Mahasiswa per Jurusan</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Jurusan</th>
+                        <th>Jumlah Mahasiswa</th>
+                        <th>Persentase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    // Asumsikan $jurusanStats diambil dari controller (e.g., query GROUP BY nama_jurusan)
+                    if (isset($jurusanStats) && is_array($jurusanStats)) {
+                        $total = array_sum(array_column($jurusanStats, 'jumlah'));
+                        foreach ($jurusanStats as $stat): 
+                            $persentase = $total > 0 ? round(($stat['jumlah'] / $total) * 100, 2) : 0; ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($stat['nama_jurusan']); ?></td>
+                                <td><?php echo htmlspecialchars($stat['jumlah']); ?></td>
+                                <td><?php echo $persentase; ?>%</td>
+                            </tr>
+                        <?php endforeach; 
+                    } else { ?>
+                        <tr><td colspan="3">Tidak ada data distribusi.</td></tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
