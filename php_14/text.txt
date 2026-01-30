@@ -1,0 +1,16 @@
+Script SQL Database db_tamu
+
+CREATE TABLE tamu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    alamat TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+==================================================================
+Script SQL Insert Data db_tamu
+INSERT INTO tamu (nama, alamat) VALUES
+('Ahmad Fauzi', 'Jombang'),
+('Siti Aisyah', 'Mojokerto'),
+('Budi Santoso', 'Surabaya');
